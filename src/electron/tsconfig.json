@@ -1,0 +1,14 @@
+{
+   "compilerOptions": {
+      // Base directory to resolve non-relative module names
+      "strict": true,
+      // Specify ECMAScript target version
+      "target": "ESNext",
+      // Specify module code generation method
+      "module": "nodenext",
+      // Enable source map generation
+      "outDir": "../../dist-electron",
+      // Enable interoperability between CommonJS and ES Modules
+      "skipLibCheck": true
+   }
+}
