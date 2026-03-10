@@ -1,6 +1,7 @@
 .git
 node_modules
+./package-lock.json
 dist
 dist-react
 dist-electron
-package-lock.json
+./README.md
