@@ -1,14 +1,19 @@
-import fs from 'fs';
-import os from 'os';
-import osUtils from 'os-utils';
+import { BrowserWindow } from "electron";
+import fs from "fs";
+import os from "os";
+import osUtils from "os-utils";
 
 const PULLING_INTERVAL = 500;
-export function pullResources() {
+export function pullResources(mainWindow: BrowserWindow) {
   setInterval(async () => {
     const cpuUsage = await getCpuUsage();
     const ramUsage = await getRamUsage();
     const storageData = getStorageData();
-    console.log({ cpuUsage, ramUsage, storageUsage: storageData.usage});
+    mainWindow.webContents.send("statistics", {
+      cpuUsage,
+      ramUsage,
+      storageUsage: storageData.usage,
+    });
   }, PULLING_INTERVAL);
 }
 
@@ -20,7 +25,7 @@ export function getStaticData() {
   return {
     totalStorage,
     cpuModel,
-    totalMemoryGB
+    totalMemoryGB,
   };
 }
 
@@ -35,12 +40,12 @@ function getRamUsage() {
 }
 
 function getStorageData() {
-  const stats = fs.statfsSync(process.platform === 'win32' ? 'C:\\' : '/');
+  const stats = fs.statfsSync(process.platform === "win32" ? "C:\\" : "/");
   const total = stats.bsize * stats.blocks;
   const free = stats.bsize * stats.bfree;
 
   return {
     total: Math.floor(total / 1_000_000_000),
-    usage: 1 - free / total
-  }
+    usage: 1 - free / total,
+  };
 }

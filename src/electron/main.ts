@@ -1,7 +1,7 @@
-import { app, BrowserWindow } from 'electron';
-import path from 'path';
+import { app, BrowserWindow, ipcMain } from "electron";
+import path from "path";
 import { isDev } from "./utils.js";
-import { pullResources } from "./resourceManage.js";
+import { getStaticData, pullResources } from "./resourceManage.js";
 import { getPreloadPath } from "./pathResolver.js";
 
 app.on("ready", () => {
@@ -17,5 +17,9 @@ app.on("ready", () => {
     mainWindow.loadFile(path.join(app.getAppPath(), "/dist-react/index.html"));
   }
 
-  pullResources();
+  pullResources(mainWindow);
+
+  ipcMain.handle("getStaticData", () => {
+    return getStaticData();
+  });
 });
