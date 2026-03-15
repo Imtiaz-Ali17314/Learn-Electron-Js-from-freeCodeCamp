@@ -3,8 +3,11 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
+  // @ts-expect-error - this is just for testing, we will implement it later
+  window.electron.getStaticData();
+ 
   return (
     <>
       <div>
