@@ -6,7 +6,10 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    window.electron.subscribeStatistics((stats) => console.log(stats));
+    const unSub = window.electron.subscribeStatistics((stats) =>
+      console.log(stats),
+    );
+    return unSub;
   }, []);
 
   return (
