@@ -2,14 +2,15 @@ import { BrowserWindow } from "electron";
 import fs from "fs";
 import os from "os";
 import osUtils from "os-utils";
+import { ipcWebCintentsSend } from "./utils.js";
 
 const PULLING_INTERVAL = 500;
 export function pullResources(mainWindow: BrowserWindow) {
   setInterval(async () => {
     const cpuUsage = await getCpuUsage();
-    const ramUsage = await getRamUsage();
+    const ramUsage = getRamUsage();
     const storageData = getStorageData();
-    mainWindow.webContents.send("statistics", {
+    ipcWebCintentsSend("statistics", mainWindow.webContents, {
       cpuUsage,
       ramUsage,
       storageUsage: storageData.usage,
@@ -29,7 +30,7 @@ export function getStaticData() {
   };
 }
 
-function getCpuUsage() {
+function getCpuUsage(): Promise<number> {
   return new Promise((resolve) => {
     osUtils.cpuUsage(resolve);
   });
