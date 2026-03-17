@@ -1,8 +1,8 @@
-import path from "path";
-import { app, BrowserWindow, Tray } from "electron";
+import { app, BrowserWindow } from "electron";
 import { ipcMainHandle, isDev } from "./utils.js";
 import { getStaticData, pullResources } from "./resourceManage.js";
-import { getAssetPath, getPreloadPath, getUIPath } from "./pathResolver.js";
+import { getPreloadPath, getUIPath } from "./pathResolver.js";
+import { createTray } from "./tray.js";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
@@ -23,10 +23,28 @@ app.on("ready", () => {
     return getStaticData();
   });
 
-  new Tray(
-    path.join(
-      getAssetPath(),
-      process.platform === "darwin" ? "trayIconTemplate.png" : "trayIcon.png",
-    ),
-  );
+  createTray(mainWindow);
+
+  handleCloseEvents(mainWindow);
 });
+
+function handleCloseEvents(mainWindow: BrowserWindow) {
+  let willClose = false;
+
+  mainWindow.on("close", (e) => {
+    if (willClose) {
+      return;
+    }
+
+    e.preventDefault();
+    mainWindow.hide();
+  });
+
+  app.on("before-quit", () => {
+    willClose = true;
+  });
+
+  mainWindow.on("show", () => {
+    willClose = false;
+  });
+}
