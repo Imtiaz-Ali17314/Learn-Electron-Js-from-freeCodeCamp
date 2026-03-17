@@ -3,6 +3,7 @@ import { ipcMainHandle, isDev } from "./utils.js";
 import { getStaticData, pullResources } from "./resourceManage.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
 import { createTray } from "./tray.js";
+import { createMenu } from "./menu.js";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
@@ -24,8 +25,8 @@ app.on("ready", () => {
   });
 
   createTray(mainWindow);
-
   handleCloseEvents(mainWindow);
+  createMenu(mainWindow);
 });
 
 function handleCloseEvents(mainWindow: BrowserWindow) {
