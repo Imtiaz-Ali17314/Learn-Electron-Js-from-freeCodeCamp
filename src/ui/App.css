@@ -40,3 +40,38 @@
 .read-the-docs {
   color: #888;
 }
+
+header {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+text-align: right;
+padding: 0.5rem;
+box-sizing: border-box;
+background-color: #181818;
+-webkit-app-region: drag;
+}
+
+header button {
+all: unset;
+border-radius: 50%;
+width: 1rem;
+height: 1rem;
+margin: 0.25rem;
+}
+
+#close {
+background-color: #ff0000;
+-webkit-app-region: no-drag;
+}
+
+#minimize {
+background-color: #ffff00;
+-webkit-app-region: no-drag;
+}
+
+#maximize {
+background-color: #00ff00;
+-webkit-app-region: no-drag;
+}
