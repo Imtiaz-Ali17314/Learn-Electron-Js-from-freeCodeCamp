@@ -4,3 +4,10 @@ dist-react/
 dist-electron/
 package-lock.json
 README.md
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
