@@ -22,6 +22,22 @@ export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
   });
 }
 
+export function ipcMainOn<Key extends keyof EventPayloadMapping>(
+  key: Key,
+  handler: (payload: EventPayloadMapping[Key]) => void,
+) {
+  ipcMain.on(key, (event, payload) => {
+    const frame = event.senderFrame;
+
+    if (!frame) {
+      throw new Error("Sender frame destroyed or unavailable");
+    }
+
+    validateEventFrame(event.senderFrame);
+    return handler(payload);
+  });
+}
+
 export function ipcWebCintentsSend<Key extends keyof EventPayloadMapping>(
   key: Key,
   wbContents: WebContents,

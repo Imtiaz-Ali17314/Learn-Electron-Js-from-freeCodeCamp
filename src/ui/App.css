@@ -42,36 +42,38 @@
 }
 
 header {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-text-align: right;
-padding: 0.5rem;
-box-sizing: border-box;
-background-color: #181818;
--webkit-app-region: drag;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: right;
+  padding: 0rem;
+  box-sizing: border-box;
+  background-color: #181818;
+  -webkit-app-region: drag;
+  padding-right: 1rem;
+  margin-bottom: 5rem;
 }
 
 header button {
-all: unset;
-border-radius: 50%;
-width: 1rem;
-height: 1rem;
-margin: 0.25rem;
+  all: unset;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.25rem;
+  color: white;
+  -webkit-app-region: no-drag;
+  margin-left: 1.5rem;
+  outline: none;
+  border: none;
 }
 
-#close {
-background-color: #ff0000;
--webkit-app-region: no-drag;
+#close span:hover {
+  background-color: #ff0000;
+}
+#minimize span:hover {
+  background-color: #f7f7f298;
 }
 
-#minimize {
-background-color: #ffff00;
--webkit-app-region: no-drag;
-}
-
-#maximize {
-background-color: #00ff00;
--webkit-app-region: no-drag;
+#maximize span:hover {
+  background-color: #f2f7f288;
 }

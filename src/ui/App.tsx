@@ -43,11 +43,28 @@ function App() {
     <>
       <div className="App">
         <header>
-          <button id="minimize" />
-          <button id="maximize" />
-          <button id="close" />
+          <button
+            id="minimize"
+            onClick={() => window.electron.sendFrameAction("MINIMIZE")}
+          >
+            <span className="material-symbols-outlined">minimize</span>
+          </button>
+
+          <button
+            id="maximize"
+            onClick={() => window.electron.sendFrameAction("MAXIMIZE")}
+          >
+            <span className="material-symbols-outlined">maximize</span>
+          </button>
+
+          <button
+            id="close"
+            onClick={() => window.electron.sendFrameAction("CLOSE")}
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </header>
-        <div style={{ height: 120 }}>
+        <div style={{ height: 120, marginTop: "5rem" }}>
           <Chart data={activeUsages} maxDataPoints={10} />
         </div>
         <a href="https://react.dev" target="_blank">

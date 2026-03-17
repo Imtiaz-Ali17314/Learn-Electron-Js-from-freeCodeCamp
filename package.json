@@ -18,6 +18,7 @@
     "dist:win": "npm run transpile:electron && npm run build && electron-builder --win --x64"
   },
   "dependencies": {
+    "material-symbols": "^0.40.2",
     "os-utils": "^0.0.14",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

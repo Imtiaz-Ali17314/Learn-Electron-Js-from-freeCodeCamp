@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-import { ipcMainHandle, isDev } from "./utils.js";
+import { ipcMainHandle, ipcMainOn, isDev } from "./utils.js";
 import { getStaticData, pullResources } from "./resourceManage.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
 import { createTray } from "./tray.js";
@@ -23,6 +23,24 @@ app.on("ready", () => {
 
   ipcMainHandle("getStaticData", () => {
     return getStaticData();
+  });
+
+  ipcMainOn("sendFrameAction", (payload) => {
+    switch (payload) {
+      case "CLOSE":
+        mainWindow.close();
+        break;
+      case "MINIMIZE":
+        mainWindow.minimize();
+        break;
+      case "MAXIMIZE":
+        if (mainWindow.isMaximized()) {
+          mainWindow.unmaximize();
+        } else {
+          mainWindow.maximize();
+        }
+        break;
+    }
   });
 
   createTray(mainWindow);
