@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { useStatistics } from "./useStatistics";
 import { Chart } from "./Chart";
-
 function App() {
-  const [count, setCount] = useState(0);
+  const staticData = useStaticData();
   const statistics = useStatistics(10);
   const [activeView, setActiveView] = useState<View>("CPU");
 
@@ -41,50 +39,103 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <header>
-          <button
-            id="minimize"
-            onClick={() => window.electron.sendFrameAction("MINIMIZE")}
-          >
-            <span className="material-symbols-outlined">minimize</span>
-          </button>
-
-          <button
-            id="maximize"
-            onClick={() => window.electron.sendFrameAction("MAXIMIZE")}
-          >
-            <span className="material-symbols-outlined">maximize</span>
-          </button>
-
-          <button
-            id="close"
-            onClick={() => window.electron.sendFrameAction("CLOSE")}
-          >
-            <span className="material-symbols-outlined">close</span>
-          </button>
-        </header>
-        <div style={{ height: 120, marginTop: "5rem" }}>
-          <Chart data={activeUsages} maxDataPoints={10} />
+      <div>
+        <Header />
+        <div className="main">
+          <div>
+            <SelectOption
+              onClick={() => setActiveView("CPU")}
+              title="CPU"
+              view="CPU"
+              subtitle={staticData?.cpuModel ?? ""}
+              data={cpuUsages}
+            />
+            <SelectOption
+              onClick={() => setActiveView("RAM")}
+              title="RAM"
+              view="RAM"
+              subtitle={(staticData?.totalMemoryGB.toString() ?? "") + " GB"}
+              data={ramUsages}
+            />
+            <SelectOption
+              onClick={() => setActiveView("STORAGE")}
+              title="STORAGE"
+              view="STORAGE"
+              subtitle={(staticData?.totalStorage.toString() ?? "") + " GB"}
+              data={storageUsages}
+            />
+          </div>
+          <div className="mainGrid">
+            <Chart
+              selectedView={activeView}
+              data={activeUsages}
+              maxDataPoints={10}
+            />
+          </div>
         </div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
+}
+
+function SelectOption(props: {
+  title: string;
+  view: View;
+  subtitle: string;
+  data: number[];
+  onClick: () => void;
+}) {
+  return (
+    <button className="selectOptions" onClick={props.onClick}>
+      <div className="selectOptionTitle">
+        <div>{props.title}</div>
+        <div>{props.subtitle}</div>
+      </div>
+      <div className="selectOptionCarts">
+        {" "}
+        <Chart selectedView={props.view} data={props.data} maxDataPoints={10} />
+      </div>
+    </button>
+  );
+}
+
+function Header() {
+  return (
+    <header>
+      <button
+        id="minimize"
+        onClick={() => window.electron.sendFrameAction("MINIMIZE")}
+      >
+        <span className="material-symbols-outlined">minimize</span>
+      </button>
+
+      <button
+        id="maximize"
+        onClick={() => window.electron.sendFrameAction("MAXIMIZE")}
+      >
+        <span className="material-symbols-outlined">maximize</span>
+      </button>
+
+      <button
+        id="close"
+        onClick={() => window.electron.sendFrameAction("CLOSE")}
+      >
+        <span className="material-symbols-outlined">close</span>
+      </button>
+    </header>
+  );
+}
+
+function useStaticData() {
+  const [staticData, setStaticData] = useState<StaticData | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      setStaticData(await window.electron.getStaticData());
+    })();
+  }, []);
+
+  return staticData;
 }
 
 export default App;
