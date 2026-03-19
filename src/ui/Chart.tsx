@@ -7,7 +7,7 @@ export type ChartProps = {
   selectedView: "CPU" | "RAM" | "STORAGE";
 };
 
-export const COLOR_MAP = {
+const COLOR_MAP = {
   CPU: {
     fill: "#0A4D5C",
     stroke: "#5DD4EE",
